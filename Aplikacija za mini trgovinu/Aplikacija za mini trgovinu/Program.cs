@@ -6,7 +6,7 @@ using System.Threading;
 /*
  1 - Artikli
     1. Unos artikla - done
-    2. Brisanje artikla
+    2. Brisanje artikla - done
         a. Po imenu artikla - done
         b. Sve one kojima je istekao rok trajanja - done
     3. Uredivanje artikla
@@ -17,7 +17,7 @@ using System.Threading;
         b. Svih artikala sortirano po imenu
         c. Svih artikala sortirano po datumu silazno
         d. Svih artikala sortirano do datumu uzlazno
-        e. Svih artikala sortirano po olicini
+        e. Svih artikala sortirano po kolicini
         f. Najprodavaniji artikl
         g. Najmanje prodavan artikl
  2 - Radnici
@@ -30,7 +30,12 @@ using System.Threading;
         a. svih radnika (format: ime - godine)
         b. svih radnika kojima je rodendan u tekucem mjesecu
  3 - Racuni
-    1. Unos novog računa - ispišu se svi proizvodi koji su dostupni u dućanu, zatim se upiše ime proizvoda i količina (isti proizvod moguće samo jednom unijeti). Radnja se ponavlja sve dok se ne unesu svi potrebni proizvodi. Kad je unos završen unosi se ključna rijeć te radnik može vidjeti što je sve na računi i dalje može poništiti račun ili potvrditi njegovo printanje. Ako je radnja potvrdna, ukljanjaju se artikli sa stanja (ukoliko im je stanje 0 brišu se skroz). Id se generira kao prvi sljedeći broj od zadnjeg računa. Isto tako, potrebno je da program odmah izračuna ukupnu cijenu svakog artikla i DateTime izdavanja računa (trenutni DateTime). Radniku se ispiše u konzoli formatirani ispis računa kojeg korisnik vidi (isti kao u sekciji ispis računa).
+    1. Unos novog računa - ispišu se svi proizvodi koji su dostupni u dućanu, zatim se upiše ime proizvoda i količina (isti proizvod moguće samo jednom unijeti). 
+       Radnja se ponavlja sve dok se ne unesu svi potrebni proizvodi. Kad je unos završen unosi se ključna rijeć te radnik može vidjeti što je sve na računi i dalje može poništiti račun ili potvrditi njegovo printanje. 
+       Ako je radnja potvrdna, ukljanjaju se artikli sa stanja (ukoliko im je stanje 0 brišu se skroz). 
+       Id se generira kao prvi sljedeći broj od zadnjeg računa. 
+       Isto tako, potrebno je da program odmah izračuna ukupnu cijenu svakog artikla i DateTime izdavanja računa (trenutni DateTime). 
+        Radniku se ispiše u konzoli formatirani ispis računa kojeg korisnik vidi (isti kao u sekciji ispis računa).
     2. Ispis
         a. Svih racuna u formatu (id - datum i vrijeme - ukupni iznos (potrebno izracunati iz kolicine artikala i cijene))
             i. Mogucnost odabira racuna po id-u pa se ispisu svi detalji racuna (id - datum i vrijeme - proizvodi) (format: ime - kolicina, svaki u novom redu) te ukupna cijena
@@ -42,13 +47,17 @@ using System.Threading;
  0 - Izlaz iz aplikacije - done
  */
 
-var articleList = new List<(string Name, int Amount, int Price, DateTime DateOfExpiry)> {
+// lista artikala
+var articleList = new List<(string Name, int Amount, double Price, DateTime DateOfExpiry)> {
     ("Cedevita naranca", 5, 15, new DateTime(2023, 2, 1)),
     ("Cedevita limun", 5, 15, new DateTime(2024, 2, 1))
 };
+
+// lista radnika
 var workers = new List<(string Name, DateTime dateOfBirth)> {};
 
 
+// izbornik
 while (true)
 {
     Console.WriteLine("1 - Artikli\n2 - Radnici\n3 - Računi\n4 - Statistika\n0 - Izlaz iz aplikacije");
@@ -109,7 +118,7 @@ while (true)
                                 if (option == "y")
                                 {
                                     articleList.RemoveAt(foundIndex);
-                                    Console.WriteLine("UspjeŠno ste obrisali artikal.");
+                                    Console.WriteLine("Uspješno ste obrisali artikal.");
                                     Thread.Sleep(1000);
                                     break;
 
@@ -135,12 +144,14 @@ while (true)
                                 {
                                     removeExpiredItem(articleList);
                                     Console.WriteLine("Uspješno ste obrisali artikle.");
+                                    Thread.Sleep(1000);
                                     break;
 
                                 }
                                 else if (option == "n")
                                 {
                                     Console.WriteLine("Odustali ste od brisanja artikla.");
+                                    Thread.Sleep(1000);
                                     break;
                                 }
                                 else
@@ -158,6 +169,16 @@ while (true)
                     break;
 
                 case "3":
+                    Console.Clear();
+                    Console.WriteLine("1 - Artikli\n\t3. Uređivanje artikala\n\t\ta. Izmjena jednog proizvoda\n\t\tb. Popusti/poskupljenja proizvoda\n\t\tc. Povratak u glavni izbornik");
+                    var choice3 = Console.ReadLine();
+                    switch (choice3)
+                    {
+                        case "a":
+
+                            break;
+
+                    }
                     break;
 
                 case "4":
@@ -234,7 +255,7 @@ static (string, DateTime) GetWorker()
 
 }
 
-static int articleNameIndexFinder(string articleSearchedName, List<(string Name, int Amount, int Price, DateTime DateOfExpiry)> articleList)
+static int articleNameIndexFinder(string articleSearchedName, List<(string Name, int Amount, double Price, DateTime DateOfExpiry)> articleList)
 {
     int foundIndex = -1;
     for (int i = 0; i < articleList.Count; i++)
@@ -253,7 +274,7 @@ static int articleNameIndexFinder(string articleSearchedName, List<(string Name,
     return foundIndex;
 }
 
-static void removeExpiredItem(List<(string Name, int Amount, int Price, DateTime DateOfExpiry)> articleList)
+static void removeExpiredItem(List<(string Name, int Amount, double Price, DateTime DateOfExpiry)> articleList)
 {
     for (int i = 0; i < articleList.Count; i++)
     {
@@ -264,4 +285,83 @@ static void removeExpiredItem(List<(string Name, int Amount, int Price, DateTime
         }
     }
 
+}
+
+static void editItem(List<(string Name, int Amount, double Price, DateTime DateOfExpiry)> articleList)
+{
+    Console.WriteLine("Unesite ime proizvoda koji želite izmijeniti: ");
+    var articleName = Console.ReadLine();
+    var foundIndex = articleNameIndexFinder(articleName, articleList);
+
+    if (foundIndex == -1)
+    {
+        Console.WriteLine("Ne postoji taj proizvod u trgovini.");
+        Thread.Sleep(1000);
+
+    }
+    else
+    {
+        Console.WriteLine("Odaberite segment koji želite izmijeniti:\n\t1 - Ime artikla\n\t2 - Količina\n\t3 - Cijena\n\t4 - Rok trajanja");
+        var option = Console.ReadLine();
+
+        switch (option)
+        {
+            case "1":
+                Console.WriteLine("Unesite novo ime artikla: ");
+                var articleNewName = Console.ReadLine();
+                Console.WriteLine("Želite li spremiti promjene? (y/n)");
+                do
+                {
+                    var choice = Console.ReadLine();
+                    if (choice == "y")
+                    {
+                        articleList[foundIndex].Name.Replace(articleList[foundIndex].Name, articleNewName);
+                        Console.WriteLine("Uspješno ste izmijenili ime.");
+                        Thread.Sleep(1000);
+                        break;
+
+                    }
+                    else if (choice == "n")
+                    {
+                        Console.WriteLine("Odustali ste od brisanja artikla.");
+                        Thread.Sleep(1000);
+                        break;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Pogrešan unos slova.");
+                    }
+                } while (true);
+                break;
+
+            case "2":
+                Console.WriteLine("Unesite novu kolicinu artikla:");
+                int articleNewAmount;
+                int.TryParse(Console.ReadLine(), out articleNewAmount);
+                Console.WriteLine("Želite li spremiti promjene? (y/n)");
+                do
+                {
+                    var choice = Console.ReadLine();
+                    if (choice == "y")
+                    {
+                        // articleList[foundIndex].Amount; -- NE RADI!!!!!!!!!!!
+                        Console.WriteLine("Uspješno ste izmijenili kolicinu.");
+                        Thread.Sleep(1000);
+                        break;
+
+                    }
+                    else if (choice == "n")
+                    {
+                        Console.WriteLine("Odustali ste od brisanja artikla.");
+                        Thread.Sleep(1000);
+                        break;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Pogrešan unos slova.");
+                    }
+                } while (true);
+                break;
+        }
+    }
 }
