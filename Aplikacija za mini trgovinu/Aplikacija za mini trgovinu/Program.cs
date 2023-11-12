@@ -21,7 +21,7 @@ using System.Threading;
         f. Najprodavaniji artikl
         g. Najmanje prodavan artikl
  2 - Radnici
-    1. Unos radnika
+    1. Unos radnika - done
     2. Brisanje radnika
         a. Po imenu
         b. Svih onih koji imaju vise od 65 godina
@@ -54,7 +54,7 @@ var articleList = new List<(string Name, int Amount, double Price, DateTime Date
 };
 
 // lista radnika
-var workers = new List<(string Name, DateTime dateOfBirth)> {
+var workersList = new List<(string Name, DateTime dateOfBirth)> {
     ("Ivan Ivanović", new DateTime(1988, 11, 5)),
     ("Zoran Matić", new DateTime(1957, 8, 1))
 };
@@ -275,7 +275,38 @@ while (true)
             Console.Clear();
             continue;
         case "2":
-            Console.WriteLine("odabir 2");
+            Console.Clear();
+            Console.WriteLine("1 - Artikli\n\t1. Unos radnika\n\t0. Povratak na glavni izbornik");
+            var choice5 = Console.ReadLine();
+            switch (choice5)
+            {
+                case "1":
+                    (string, DateTime) newWorker = GetWorker();
+                    Console.WriteLine("Želite li spremiti promjene? (y/n)");
+                    do
+                    {
+                        var option = Console.ReadLine();
+                        if (option == "y")
+                        {
+                            workersList.Add(newWorker);
+                            Console.WriteLine("Uspješno ste dodali radnika.");
+                            Thread.Sleep(1000);
+                            break;
+
+                        }
+                        else if (option == "n")
+                        {
+                            Console.WriteLine("Odustali ste od dodavanja radnika.");
+                            Thread.Sleep(1000);
+                            break;
+                        }
+                        else
+                        {
+                            Console.WriteLine("Pogrešan unos slova.");
+                        }
+                    } while (true);
+                    break;
+            }
             continue;
         case "3":
             Console.WriteLine("odabir 3");
@@ -295,6 +326,7 @@ while (true)
     break;
 }
 
+// funckije
 static (string, int, double, DateTime) GetEntry()
 {
     Console.WriteLine("Unesi ime artikla:");
