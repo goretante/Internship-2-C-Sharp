@@ -12,3 +12,17 @@ C:\Users\Krešo\Desktop\Ante\dump\domaci 2\Internship-2-C-Sharp\Aplikacija za mi
 C:\Users\Krešo\Desktop\Ante\dump\domaci 2\Internship-2-C-Sharp\Aplikacija za mini trgovinu\Aplikacija za mini trgovinu\obj\Debug\net6.0\Aplikacija za mini trgovinu.pdb
 C:\Users\Krešo\Desktop\Ante\dump\domaci 2\Internship-2-C-Sharp\Aplikacija za mini trgovinu\Aplikacija za mini trgovinu\obj\Debug\net6.0\Aplikacija za mini trgovinu.genruntimeconfig.cache
 C:\Users\Krešo\Desktop\Ante\dump\domaci 2\Internship-2-C-Sharp\Aplikacija za mini trgovinu\Aplikacija za mini trgovinu\obj\Debug\net6.0\ref\Aplikacija za mini trgovinu.dll
+C:\Users\Ante\Desktop\programiranje\dump\domaci 2\Internship-2-C-Sharp\Aplikacija za mini trgovinu\Aplikacija za mini trgovinu\bin\Debug\net6.0\Aplikacija za mini trgovinu.exe
+C:\Users\Ante\Desktop\programiranje\dump\domaci 2\Internship-2-C-Sharp\Aplikacija za mini trgovinu\Aplikacija za mini trgovinu\bin\Debug\net6.0\Aplikacija za mini trgovinu.deps.json
+C:\Users\Ante\Desktop\programiranje\dump\domaci 2\Internship-2-C-Sharp\Aplikacija za mini trgovinu\Aplikacija za mini trgovinu\bin\Debug\net6.0\Aplikacija za mini trgovinu.runtimeconfig.json
+C:\Users\Ante\Desktop\programiranje\dump\domaci 2\Internship-2-C-Sharp\Aplikacija za mini trgovinu\Aplikacija za mini trgovinu\bin\Debug\net6.0\Aplikacija za mini trgovinu.dll
+C:\Users\Ante\Desktop\programiranje\dump\domaci 2\Internship-2-C-Sharp\Aplikacija za mini trgovinu\Aplikacija za mini trgovinu\bin\Debug\net6.0\Aplikacija za mini trgovinu.pdb
+C:\Users\Ante\Desktop\programiranje\dump\domaci 2\Internship-2-C-Sharp\Aplikacija za mini trgovinu\Aplikacija za mini trgovinu\obj\Debug\net6.0\Aplikacija za mini trgovinu.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Ante\Desktop\programiranje\dump\domaci 2\Internship-2-C-Sharp\Aplikacija za mini trgovinu\Aplikacija za mini trgovinu\obj\Debug\net6.0\Aplikacija za mini trgovinu.AssemblyInfoInputs.cache
+C:\Users\Ante\Desktop\programiranje\dump\domaci 2\Internship-2-C-Sharp\Aplikacija za mini trgovinu\Aplikacija za mini trgovinu\obj\Debug\net6.0\Aplikacija za mini trgovinu.AssemblyInfo.cs
+C:\Users\Ante\Desktop\programiranje\dump\domaci 2\Internship-2-C-Sharp\Aplikacija za mini trgovinu\Aplikacija za mini trgovinu\obj\Debug\net6.0\Aplikacija za mini trgovinu.csproj.CoreCompileInputs.cache
+C:\Users\Ante\Desktop\programiranje\dump\domaci 2\Internship-2-C-Sharp\Aplikacija za mini trgovinu\Aplikacija za mini trgovinu\obj\Debug\net6.0\Aplikacija za mini trgovinu.dll
+C:\Users\Ante\Desktop\programiranje\dump\domaci 2\Internship-2-C-Sharp\Aplikacija za mini trgovinu\Aplikacija za mini trgovinu\obj\Debug\net6.0\refint\Aplikacija za mini trgovinu.dll
+C:\Users\Ante\Desktop\programiranje\dump\domaci 2\Internship-2-C-Sharp\Aplikacija za mini trgovinu\Aplikacija za mini trgovinu\obj\Debug\net6.0\Aplikacija za mini trgovinu.pdb
+C:\Users\Ante\Desktop\programiranje\dump\domaci 2\Internship-2-C-Sharp\Aplikacija za mini trgovinu\Aplikacija za mini trgovinu\obj\Debug\net6.0\Aplikacija za mini trgovinu.genruntimeconfig.cache
+C:\Users\Ante\Desktop\programiranje\dump\domaci 2\Internship-2-C-Sharp\Aplikacija za mini trgovinu\Aplikacija za mini trgovinu\obj\Debug\net6.0\ref\Aplikacija za mini trgovinu.dll

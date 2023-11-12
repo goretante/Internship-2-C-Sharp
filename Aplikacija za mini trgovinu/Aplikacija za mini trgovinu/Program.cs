@@ -10,14 +10,14 @@ using System.Threading;
         a. Po imenu artikla - done
         b. Sve one kojima je istekao rok trajanja - done
     3. Uredivanje artikla
-        a. Zasebno proizvoda (pronade se artikal pa se bira sto se zeli promijeniti)
-        b. Popust/poskupljenje na sve proizvode unutar trgovine
+        a. Zasebno proizvoda (pronade se artikal pa se bira sto se zeli promijeniti) - done
+        b. Popust/poskupljenje na sve proizvode unutar trgovine - done
     4. Ispis
         a. Svih artikala kako s spremljeni (format: ime (kolicina) - cijena - broj dana od/do isteka) - done
-        b. Svih artikala sortirano po imenu
-        c. Svih artikala sortirano po datumu silazno
-        d. Svih artikala sortirano do datumu uzlazno
-        e. Svih artikala sortirano po kolicini
+        b. Svih artikala sortirano po imenu - done
+        c. Svih artikala sortirano po datumu silazno - done
+        d. Svih artikala sortirano do datumu uzlazno - done
+        e. Svih artikala sortirano po kolicini - done
         f. Najprodavaniji artikl
         g. Najmanje prodavan artikl
  2 - Radnici
@@ -49,12 +49,15 @@ using System.Threading;
 
 // lista artikala
 var articleList = new List<(string Name, int Amount, double Price, DateTime DateOfExpiry)> {
-    ("Cedevita naranca", 5, 15, new DateTime(2023, 2, 1)),
-    ("Cedevita limun", 5, 15, new DateTime(2024, 2, 1))
+    ("Cedevita naranca", 8, 15.0, new DateTime(2023, 2, 1)),
+    ("Cedevita limun", 5, 15.0, new DateTime(2024, 2, 1))
 };
 
 // lista radnika
-var workers = new List<(string Name, DateTime dateOfBirth)> {};
+var workers = new List<(string Name, DateTime dateOfBirth)> {
+    ("Ivan Ivanović", new DateTime(1988, 11, 5)),
+    ("Zoran Matić", new DateTime(1957, 8, 1))
+};
 
 
 // izbornik
@@ -72,7 +75,7 @@ while (true)
             {
 
                 case "1":
-                    (string, int, int, DateTime) tempTuple = GetEntry();
+                    (string, int, double, DateTime) tempTuple = GetEntry();
                     Console.WriteLine("Želite li spremiti promjene? (y/n)");
                     do
                     {
@@ -175,15 +178,23 @@ while (true)
                     switch (choice3)
                     {
                         case "a":
-
+                            editItem(articleList);
                             break;
 
+                        case "b":
+                            editPrices(articleList);
+                            break;
+
+                        case "c":
+                            Console.WriteLine("Povratak u glavni izbornik!");
+                            Thread.Sleep(1000);
+                            break;
                     }
                     break;
 
                 case "4":
                     Console.Clear();
-                    Console.WriteLine("1 - Artikli\n\t4. Ispis\n\t\ta. Svih artikala kako su spremljeni");
+                    Console.WriteLine("1 - Artikli\n\t4. Ispis\n\t\ta. Svih artikala kako su spremljeni\n\t\tb. Svih artikala po nazivu\n\t\tc. Svih artikala po datumu (silazno)\n\t\td. Svih artikala po datumu (uzlazno)");
                     var choice4 = Console.ReadLine();
                     switch (choice4)
                     {
@@ -197,11 +208,68 @@ while (true)
                             Console.WriteLine("Pritisnite tipku ENTER za nastavak...");
                             Console.ReadLine();
                             break;
+
+                        case "b":
+                            Console.WriteLine("Lista svih artikala raspoređena po nazivu:");
+                            var listSortedByName = articleList.OrderBy(x => x.Name).ToList();
+                            foreach (var item in listSortedByName)
+                            {
+                                TimeSpan daysUntilExpiry = item.DateOfExpiry.Subtract(DateTime.Now);
+                                Console.WriteLine($"{item.Name} ({item.Amount}) - {item.Price} - {daysUntilExpiry.Days}");
+                            }
+                            Console.WriteLine("Pritisnite tipku ENTER za nastavak...");
+                            Console.ReadLine();
+                            break;
+
+                        case "c":
+                            Console.WriteLine("Lista svih artikala raspoređena po datumu silazno:");
+                            List<(string Name, int Amount, double Price, DateTime DateOfExpiry)> listSortedByDescendingDates = articleList;
+                            listSortedByDescendingDates.Sort((t1, t2) => t2.DateOfExpiry.CompareTo(t1.DateOfExpiry));
+                            foreach (var item in listSortedByDescendingDates)
+                            {
+                                TimeSpan daysUntilExpiry = item.DateOfExpiry.Subtract(DateTime.Now);
+                                Console.WriteLine($"{item.Name} ({item.Amount}) - {item.Price} - {daysUntilExpiry.Days}");
+                            }
+                            Console.WriteLine("Pritisnite tipku ENTER za nastavak...");
+                            Console.ReadLine();
+                            break;
+
+                        case "d":
+                            Console.WriteLine("Lista svih artikala raspoređena po datumu uzlazno:");
+                            List<(string Name, int Amount, double Price, DateTime DateOfExpiry)> listSortedByAscendingDates = articleList;
+                            listSortedByAscendingDates.Sort((t1, t2) => t1.DateOfExpiry.CompareTo(t2.DateOfExpiry));
+                            foreach (var item in listSortedByAscendingDates)
+                            {
+                                TimeSpan daysUntilExpiry = item.DateOfExpiry.Subtract(DateTime.Now);
+                                Console.WriteLine($"{item.Name} ({item.Amount}) - {item.Price} - {daysUntilExpiry.Days}");
+                            }
+                            Console.WriteLine("Pritisnite tipku ENTER za nastavak...");
+                            Console.ReadLine();
+                            break;
+
+                        case "e":
+                            Console.WriteLine("Lista svih artikala raspoređena po količini artikala:");
+                            List<(string Name, int Amount, double Price, DateTime DateOfExpiry)> listSortedByAmount = articleList;
+                            listSortedByAmount.OrderBy(t1 => t1.Amount);
+                            foreach (var item in listSortedByAmount)
+                            {
+                                TimeSpan daysUntilExpiry = item.DateOfExpiry.Subtract(DateTime.Now);
+                                Console.WriteLine($"{item.Name} ({item.Amount}) - {item.Price} - {daysUntilExpiry.Days}");
+                            }
+                            Console.WriteLine("Pritisnite tipku ENTER za nastavak...");
+                            Console.ReadLine();
+                            break;
+
+                        case "f":
+                            Console.WriteLine("Povratak u glavni izbornik!");
+                            Thread.Sleep(1000);
+                            break;
                     }
                     break;
 
                 case "0":
-                    Console.WriteLine("Povratak na glavni meni!");
+                    Console.WriteLine("Povratak u glavni izbornik!");
+                    Thread.Sleep(1000);
                     break;
             }
             Console.Clear();
@@ -220,12 +288,14 @@ while (true)
             break;
         default:
             Console.WriteLine("Pogresan unos.");
+            Thread.Sleep(1000);
+            Console.Clear();
             continue;
     }
     break;
 }
 
-static (string, int, int, DateTime) GetEntry()
+static (string, int, double, DateTime) GetEntry()
 {
     Console.WriteLine("Unesi ime artikla:");
     var articleName = Console.ReadLine();
@@ -233,8 +303,8 @@ static (string, int, int, DateTime) GetEntry()
     int amount;
     int.TryParse(Console.ReadLine(), out amount);
     Console.WriteLine("Unesi cijenu: ");
-    int price;
-    int.TryParse(Console.ReadLine(), out price);
+    double price;
+    double.TryParse(Console.ReadLine(), out price);
     Console.WriteLine("Unesi datum isteka roka (dd/mm/gggg): ");
     string pattern = "dd/MM/yyyy";
     DateTime dateOfExpiry = DateTime.ParseExact(Console.ReadLine(), pattern, null);
@@ -344,15 +414,76 @@ static void editItem(List<(string Name, int Amount, double Price, DateTime DateO
                     var choice = Console.ReadLine();
                     if (choice == "y")
                     {
-                        // articleList[foundIndex].Amount; -- NE RADI!!!!!!!!!!!
-                        Console.WriteLine("Uspješno ste izmijenili kolicinu.");
+                        (string, int, double, DateTime) tempAmount = (articleList[foundIndex].Name, articleNewAmount, articleList[foundIndex].Price, articleList[foundIndex].DateOfExpiry);
+                        articleList[foundIndex] = tempAmount;
+                        Console.WriteLine("Uspješno ste izmijenili količinu.");
                         Thread.Sleep(1000);
                         break;
 
                     }
                     else if (choice == "n")
                     {
-                        Console.WriteLine("Odustali ste od brisanja artikla.");
+                        Console.WriteLine("Odustali ste od promjene artikla.");
+                        Thread.Sleep(1000);
+                        break;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Pogrešan unos slova.");
+                    }
+                } while (true);
+                break;
+
+            case "3":
+                Console.WriteLine("Unesite novu cijenu artikla:");
+                double articleNewPrice;
+                double.TryParse(Console.ReadLine(), out articleNewPrice);
+                Console.WriteLine("Želite li spremiti promjene? (y/n)");
+                do
+                {
+                    var choice = Console.ReadLine();
+                    if (choice == "y")
+                    {
+                        (string, int, double, DateTime) tempPrice = (articleList[foundIndex].Name, articleList[foundIndex].Amount, articleNewPrice, articleList[foundIndex].DateOfExpiry);
+                        articleList[foundIndex] = tempPrice;
+                        Console.WriteLine("Uspješno ste izmijenili cijenu artikla.");
+                        Thread.Sleep(1000);
+                        break;
+
+                    }
+                    else if (choice == "n")
+                    {
+                        Console.WriteLine("Odustali ste od promjene artikla.");
+                        Thread.Sleep(1000);
+                        break;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Pogrešan unos slova.");
+                    }
+                } while (true);
+                break;
+
+            case "4":
+                Console.WriteLine("Unesite novi datum isteka roka (dd/mm/gggg): ");
+                string pattern = "dd/MM/yyyy";
+                DateTime newDateOfExpiry = DateTime.ParseExact(Console.ReadLine(), pattern, null);
+                Console.WriteLine("Želite li spremiti promjene? (y/n)");
+                do
+                {
+                    var choice = Console.ReadLine();
+                    if (choice == "y")
+                    {
+                        (string, int, double, DateTime) tempPrice = (articleList[foundIndex].Name, articleList[foundIndex].Amount, articleList[foundIndex].Price, newDateOfExpiry);
+                        articleList[foundIndex] = tempPrice;
+                        Console.WriteLine("Uspješno ste izmijenili datum roka trajanja.");
+                        Thread.Sleep(1000);
+                        break;
+
+                    }
+                    else if (choice == "n")
+                    {
+                        Console.WriteLine("Odustali ste od promjene artikla.");
                         Thread.Sleep(1000);
                         break;
                     }
@@ -364,4 +495,64 @@ static void editItem(List<(string Name, int Amount, double Price, DateTime DateO
                 break;
         }
     }
+}
+
+static void editPrices(List<(string Name, int Amount, double Price, DateTime DateOfExpiry)> articleList)
+{
+    Console.WriteLine("Unesite postotak poskupljenja/sniženja cijene (pozitivan broj za poskupljenje, negativan za sniženje):");
+    double percentage;
+    double.TryParse(Console.ReadLine(), out percentage);
+    Console.WriteLine();
+    Console.WriteLine("Želite li spremiti promjene? (y/n)");
+    do
+    {
+        var choice = Console.ReadLine();
+        if (choice == "y")
+        {
+            if (percentage == 0)
+            {
+                Console.WriteLine("Nema promjene u cijeni.");
+                Thread.Sleep(1000);
+            }
+            else if (percentage > 0)
+            {
+                for (int i = 0; i < articleList.Count; i++)
+                {
+                    double newArticlePrice;
+                    newArticlePrice = Math.Round(articleList[i].Price + articleList[i].Price * percentage / 100, 2);
+                    (string, int, double, DateTime) temp = (articleList[i].Name, articleList[i].Amount, newArticlePrice, articleList[i].DateOfExpiry);
+                    articleList[i] = temp;
+                }
+                Console.WriteLine($"Cijena je uspješno podignuta za {percentage}%.");
+                Thread.Sleep(1000);
+            }
+            else
+            {
+                for (int i = 0; i < articleList.Count; i++)
+                {
+                    double newArticlePrice;
+                    newArticlePrice = Math.Round(articleList[i].Price - articleList[i].Price * percentage / 100, 2);
+                    (string, int, double, DateTime) temp = (articleList[i].Name, articleList[i].Amount, newArticlePrice, articleList[i].DateOfExpiry);
+                    articleList[i] = temp;
+                }
+                Console.WriteLine($"Cijena je uspješno snižena za {percentage}%.");
+                Thread.Sleep(1000);
+
+            }
+            break;
+
+        }
+        else if (choice == "n")
+        {
+            Console.WriteLine("Odustali ste od promjene artikla.");
+            Thread.Sleep(1000);
+            break;
+        }
+        else
+        {
+            Console.WriteLine("Pogrešan unos slova.");
+        }
+    } while (true);
+
+
 }
