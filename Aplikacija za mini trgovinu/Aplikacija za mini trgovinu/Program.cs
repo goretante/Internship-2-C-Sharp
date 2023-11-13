@@ -23,12 +23,12 @@ using System.Threading;
  2 - Radnici
     1. Unos radnika - done
     2. Brisanje radnika
-        a. Po imenu
+        a. Po imenu - done
         b. Svih onih koji imaju vise od 65 godina
     3. Uredivanje radnika
     4. Ispis
-        a. svih radnika (format: ime - godine)
-        b. svih radnika kojima je rodendan u tekucem mjesecu
+        a. svih radnika (format: ime - godine) - done
+        b. svih radnika kojima je rodendan u tekucem mjesecu - done
  3 - Racuni
     1. Unos novog računa - ispišu se svi proizvodi koji su dostupni u dućanu, zatim se upiše ime proizvoda i količina (isti proizvod moguće samo jednom unijeti). 
        Radnja se ponavlja sve dok se ne unesu svi potrebni proizvodi. Kad je unos završen unosi se ključna rijeć te radnik može vidjeti što je sve na računi i dalje može poništiti račun ili potvrditi njegovo printanje. 
@@ -276,11 +276,12 @@ while (true)
             continue;
         case "2":
             Console.Clear();
-            Console.WriteLine("1 - Artikli\n\t1. Unos radnika\n\t0. Povratak na glavni izbornik");
+            Console.WriteLine("2 - Radnici\n\t1. Unos radnika\n\t2. Brisanje radnika\n\t4. Ispis\n\t0. Povratak na glavni izbornik");
             var choice5 = Console.ReadLine();
             switch (choice5)
             {
                 case "1":
+                    Console.WriteLine("2 - Radnici\n\t1. Unos radnika");
                     (string, DateTime) newWorker = GetWorker();
                     Console.WriteLine("Želite li spremiti promjene? (y/n)");
                     do
@@ -306,7 +307,45 @@ while (true)
                         }
                     } while (true);
                     break;
+
+                case "2":
+                    Console.Clear();
+                    Console.WriteLine("2 - Radnici\n\t2. Brisanje radnika\n\t\ta. Po imenu\n\t\tb. Svi stariji od 65 godina");
+                    var choice7 = Console.ReadLine();
+                    switch (choice7)
+                    {
+                        case "a":
+                            deleteWorker(workersList);
+                            break;
+                    }
+                    break;
+
+                case "4":
+                    Console.Clear();
+                    Console.WriteLine("2 - Radnici\n\t4. Ispis\n\t\ta. Ispis svih radnika\n\t\tb. Ispis radnika kojima je rođendan u tekućem mjesecu.");
+                    var choice6 = Console.ReadLine();
+                    switch (choice6)
+                    {
+                        case "a":
+                            PrintWorkers(workersList);
+                            break;
+
+                        case "b":
+                            PrintWorkersBornInThisMonth(workersList);
+                            break;
+                    }
+                    break;
+
+                case "0":
+                    Console.WriteLine("Povratak na glavni izbornik!");
+                    Thread.Sleep(1000);
+                    break;
+                default:
+                    Console.WriteLine("Pogresan unos!");
+                    Thread.Sleep(1000);
+                    break;
             }
+            Console.Clear();
             continue;
         case "3":
             Console.WriteLine("odabir 3");
@@ -587,4 +626,87 @@ static void editPrices(List<(string Name, int Amount, double Price, DateTime Dat
     } while (true);
 
 
+}
+
+static void PrintWorkers(List<(string Name, DateTime DateOfBirth)> workersList)
+{
+    Console.Clear();
+    Console.WriteLine("Lista radnika (Ime i prezime - Godine):");
+    foreach (var worker in workersList)
+    {
+        TimeSpan yearsOld = DateTime.Now.Subtract(worker.DateOfBirth);
+        Console.WriteLine($"{worker.Name} - {yearsOld.Days / 365 }");
+    }
+    Console.WriteLine("Pritisnite tipku ENTER za nastavak...");
+    Console.ReadLine();
+}
+
+static void PrintWorkersBornInThisMonth(List<(string Name, DateTime DateOfBirth)> workersList)
+{
+    Console.Clear();
+    Console.WriteLine("Lista radnika kojima je rođendan ovaj mjesec:");
+    foreach (var worker in workersList)
+    {
+        if (worker.DateOfBirth.Month == DateTime.Now.Month)
+        {
+            TimeSpan yearsOld = DateTime.Now.Subtract(worker.DateOfBirth);
+            Console.WriteLine($"{worker.Name} - {yearsOld.Days / 365}");
+        }
+    }
+    Console.WriteLine("Pritisnite tipku ENTER za nastavak...");
+    Console.ReadLine();
+}
+
+static void deleteWorker(List<(string Name, DateTime DateOfBirth)> workersList)
+{
+    Console.Clear();
+    Console.WriteLine("Unesi ime i prezime radnika kojega želite izbrisati: ");
+    var status = 0;
+    var searchedWorker = Console.ReadLine();
+    for (int i = 0; i < workersList.Count; i++)
+    {
+        if (searchedWorker == workersList[i].Name)
+        {
+            Console.WriteLine("Želite li spremiti promjene? (y/n)");
+            do
+            {
+                var option = Console.ReadLine();
+                if (option == "y")
+                {
+                    workersList.RemoveAt(i);
+                    status = 1;
+                    break;
+                }
+                else if (option == "n")
+                {
+                    status = 2;
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("Pogrešan unos slova");
+                }
+            } while (true);
+        }
+        else
+        {
+            status = 0;
+        }
+    }
+
+    if (status == 0)
+    {
+        Console.WriteLine("Navedeno ime nije u listi radnika.");
+        Thread.Sleep(1000);
+    }
+    else if (status == 1)
+    {
+        Console.WriteLine("Uspješno ste obrisali radnika.");
+        Thread.Sleep(1000);
+    }
+    else if (status == 2)
+    {
+        Console.WriteLine("Odustali ste od brisanja.");
+        Thread.Sleep(1000);
+    }
 }
