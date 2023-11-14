@@ -24,8 +24,8 @@ using System.Threading;
     1. Unos radnika - done
     2. Brisanje radnika
         a. Po imenu - done
-        b. Svih onih koji imaju vise od 65 godina
-    3. Uredivanje radnika
+        b. Svih onih koji imaju vise od 65 godina - done
+    3. Uredivanje radnika - done
     4. Ispis
         a. svih radnika (format: ime - godine) - done
         b. svih radnika kojima je rodendan u tekucem mjesecu - done
@@ -43,7 +43,11 @@ using System.Threading;
     1. Ukupan broj artikala u trgovini
     2. Vrijednost artikala koji nisu prodani
     3. Vrijednost svih artikala koji su prodani
-    4. Stanje po mjesecima - vlasnik unosi datum i godinu za koji ga zanima, iznos plaća radnika, iznos najma i svih ostalih troškova, a aplikacija izračuna u tom mjesecu koliki je iznos zaradio/izgubio po formuli: ukupna zarada u tom mjesecu * ⅓ - plaće - ostali troškovi
+    4. Stanje po mjesecima - vlasnik unosi datum i godinu za koji ga zanima, 
+                             iznos plaća radnika, 
+                             iznos najma i svih ostalih troškova, 
+                             a aplikacija izračuna u tom mjesecu koliki je iznos zaradio/izgubio po formuli: 
+                             ukupna zarada u tom mjesecu * ⅓ - plaće - ostali troškovi
  0 - Izlaz iz aplikacije - done
  */
 
@@ -276,7 +280,7 @@ while (true)
             continue;
         case "2":
             Console.Clear();
-            Console.WriteLine("2 - Radnici\n\t1. Unos radnika\n\t2. Brisanje radnika\n\t4. Ispis\n\t0. Povratak na glavni izbornik");
+            Console.WriteLine("2 - Radnici\n\t1. Unos radnika\n\t2. Brisanje radnika\n\t3. Uređivanje radnika\n\t4. Ispis\n\t0. Povratak na glavni izbornik");
             var choice5 = Console.ReadLine();
             switch (choice5)
             {
@@ -317,7 +321,22 @@ while (true)
                         case "a":
                             deleteWorker(workersList);
                             break;
+
+                        case "b":
+                            DeleteWorkersOverAge(workersList);
+                            break;
+
+                        case "c":
+                            Console.WriteLine("Povratak u glavni izbornik!");
+                            Thread.Sleep(1000);
+                            break;
                     }
+                    break;
+
+                case "3":
+                    Console.Clear();
+                    Console.WriteLine("2 - Radnici\n\t3. Uređivanje radnika");
+                    EditWorker(workersList);
                     break;
 
                 case "4":
@@ -332,6 +351,11 @@ while (true)
 
                         case "b":
                             PrintWorkersBornInThisMonth(workersList);
+                            break;
+
+                        case "c":
+                            Console.WriteLine("Povratak u glavni izbornik!");
+                            Thread.Sleep(1000);
                             break;
                     }
                     break;
@@ -456,7 +480,8 @@ static void editItem(List<(string Name, int Amount, double Price, DateTime DateO
                     var choice = Console.ReadLine();
                     if (choice == "y")
                     {
-                        articleList[foundIndex].Name.Replace(articleList[foundIndex].Name, articleNewName);
+                        (string, int, double, DateTime) tempName = (articleNewName, articleList[foundIndex].Amount, articleList[foundIndex].Price, articleList[foundIndex].DateOfExpiry);
+                        articleList[foundIndex] = tempName;
                         Console.WriteLine("Uspješno ste izmijenili ime.");
                         Thread.Sleep(1000);
                         break;
@@ -545,8 +570,8 @@ static void editItem(List<(string Name, int Amount, double Price, DateTime DateO
                     var choice = Console.ReadLine();
                     if (choice == "y")
                     {
-                        (string, int, double, DateTime) tempPrice = (articleList[foundIndex].Name, articleList[foundIndex].Amount, articleList[foundIndex].Price, newDateOfExpiry);
-                        articleList[foundIndex] = tempPrice;
+                        (string, int, double, DateTime) tempDate = (articleList[foundIndex].Name, articleList[foundIndex].Amount, articleList[foundIndex].Price, newDateOfExpiry);
+                        articleList[foundIndex] = tempDate;
                         Console.WriteLine("Uspješno ste izmijenili datum roka trajanja.");
                         Thread.Sleep(1000);
                         break;
@@ -709,4 +734,157 @@ static void deleteWorker(List<(string Name, DateTime DateOfBirth)> workersList)
         Console.WriteLine("Odustali ste od brisanja.");
         Thread.Sleep(1000);
     }
+}
+
+static void DeleteWorkersOverAge(List<(string Name, DateTime DateOfBirth)> workersList)
+{
+    Console.Clear();
+    List<(string Name, DateTime DateOfBirth)> tempWorkersList = workersList;
+    int overAgeWorkersCount = 0;
+    int whileCounter = 0;
+
+    foreach (var worker in tempWorkersList)
+    {
+        TimeSpan yearsOld = DateTime.Now.Subtract(worker.DateOfBirth);
+        var yearsOldv2 = yearsOld.TotalDays / 365;
+        if (yearsOldv2 >= 65)
+        {
+            overAgeWorkersCount++;
+        }
+    }
+
+    Console.WriteLine("Želite li obrisati sve radnike koji imaju preko 65 godina? (y/n)");
+    do
+    {
+        var option = Console.ReadLine();
+        if (option == "y")
+        {
+            while (whileCounter != overAgeWorkersCount)
+            {
+                for (int i = 0; i < workersList.Count; i++) {
+                    
+                    TimeSpan yearsOldv3 = DateTime.Now.Subtract(workersList[i].DateOfBirth);
+                    var yearsOldv4 = yearsOldv3.TotalDays / 365;
+                    if (yearsOldv4 >= 65)
+                    {
+                        workersList.RemoveAt(i);
+                        whileCounter++;
+                    }
+                }
+            }
+            Console.WriteLine("Uspješno ste obrisali radnike starije od 65.");
+            break;
+        }
+        else if (option == "n")
+        {
+            Console.WriteLine("Odustali ste od brisanja radnika.");
+            break;
+        }
+        else
+        {
+            Console.WriteLine("Pogrešan unos slova");
+        }
+    } while (true);
+
+    Thread.Sleep(1000);
+}
+
+static int workerNameIndexFinder(string workerSearchedName, List<(string Name, DateTime DateOfBirth)> workersList)
+{
+    int foundIndex = -1;
+    for (int i = 0; i < workersList.Count; i++)
+    {
+        if (workerSearchedName == workersList[i].Name)
+        {
+            foundIndex = i;
+            break;
+        }
+        else
+        {
+            foundIndex = -1;
+        }
+    }
+
+    return foundIndex;
+}
+
+static void EditWorker(List<(string Name, DateTime DateOfBirth)> workersList)
+{
+    Console.WriteLine("Unesite ime i prezime radnika kojeg želite izmijeniti: ");
+    var workerToEdit = Console.ReadLine();
+    var indexOfWorker = workerNameIndexFinder(workerToEdit, workersList);
+
+    if (indexOfWorker == -1)
+    {
+        Console.WriteLine("Radnik s tim imenom ne radi u dućanu");
+        Thread.Sleep(1000);
+    }
+    else
+    {
+        Console.WriteLine("Odaberite segment koji želite izmijeniti:\n\t1 - Ime radnika\n\t2 - Datum rođenja");
+        var option = Console.ReadLine();
+
+        switch (option)
+        {
+            case "1":
+                Console.WriteLine("Unesite novo ime radnika: ");
+                var workerNewName = Console.ReadLine();
+                Console.WriteLine("Želite li spremiti promjene? (y/n)");
+                do
+                {
+                    var choice = Console.ReadLine();
+                    if (choice == "y")
+                    {
+                        (string, DateTime) tempName = (workerNewName, workersList[indexOfWorker].DateOfBirth);
+                        workersList[indexOfWorker] = tempName;
+                        Console.WriteLine("Uspješno ste izmijenili ime.");
+                        Thread.Sleep(1000);
+                        break;
+
+                    }
+                    else if (choice == "n")
+                    {
+                        Console.WriteLine("Odustali ste od brisanja artikla.");
+                        Thread.Sleep(1000);
+                        break;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Pogrešan unos slova.");
+                    }
+                } while (true);
+                break;
+
+            case "2":
+                Console.WriteLine("Unesite novi datum rođenja (dd/mm/gggg): ");
+                string pattern = "dd/MM/yyyy";
+                DateTime newDateOfBirth = DateTime.ParseExact(Console.ReadLine(), pattern, null);
+                Console.WriteLine("Želite li spremiti promjene? (y/n)");
+                do
+                {
+                    var choice = Console.ReadLine();
+                    if (choice == "y")
+                    {
+                        (string, DateTime) tempDate = (workersList[indexOfWorker].Name, newDateOfBirth);
+                        workersList[indexOfWorker] = tempDate;
+                        Console.WriteLine("Uspješno ste izmijenili datum roka trajanja.");
+                        Thread.Sleep(1000);
+                        break;
+
+                    }
+                    else if (choice == "n")
+                    {
+                        Console.WriteLine("Odustali ste od promjene artikla.");
+                        Thread.Sleep(1000);
+                        break;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Pogrešan unos slova.");
+                    }
+                } while (true);
+                break;
+        }
+    }
+
 }
