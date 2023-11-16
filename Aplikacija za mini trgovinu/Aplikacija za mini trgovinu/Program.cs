@@ -53,7 +53,7 @@ using System.Threading;
 
 // lista artikala
 var articleList = new List<(string Name, int Amount, double Price, DateTime DateOfExpiry)> {
-    ("Cedevita naranca", 8, 15.0, new DateTime(2023, 2, 1)),
+    ("Cedevita naranca", 8, 14.2, new DateTime(2023, 2, 1)),
     ("Cedevita limun", 5, 15.0, new DateTime(2024, 2, 1))
 };
 
@@ -63,6 +63,18 @@ var workersList = new List<(string Name, DateTime dateOfBirth)> {
     ("Zoran Matić", new DateTime(1957, 8, 1))
 };
 
+var receiptsList = new List<(int ID, DateTime receiptTime)> {
+    ( 1,  new DateTime(2023, 11, 15, 14, 33, 15) )
+
+};
+
+/*
+var soldItemsList = new List<List<(string Name, int Amount, double Price)>> {
+
+};
+soldItemsList.Add(new List<(string Name, int Amount, double Price)>());
+soldItemsList[0].Add(("Cedevita limun", 10, 15.0));
+*/
 
 // izbornik
 while (true)
